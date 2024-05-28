@@ -439,7 +439,7 @@ void loop() {
         if (((currentHour == 10) || (currentHour == 16) || (currentHour == 23)) && (currentMinutes == 0)) {
           digitalWrite(D5_FAN, FAN_ON);
           FAN_is_ON = true;
-          Serial.println("Включаем вытяжку");
+          //Serial.println("Включаем вытяжку");
         }
       }
 
@@ -447,7 +447,7 @@ void loop() {
         if (((currentHour == 10) || (currentHour == 16) || (currentHour == 23)) && (currentMinutes == 10)) {
           digitalWrite(D5_FAN, FAN_OFF);
           FAN_is_ON = false;
-          Serial.println("Выключаем вытяжку");
+          //Serial.println("Выключаем вытяжку");
         }
       }
 
@@ -473,8 +473,10 @@ void loop() {
       /*Serial.print("Year: ");
         Serial.println(currentYear);*/
 
-
-      String dataPath_T(monthDay);
+      //Установим температуру
+      String dataPath_T("BME");
+      dataPath_T += "/";
+      dataPath_T += monthDay;
       dataPath_T += "-";
       dataPath_T += currentMonth;
       dataPath_T += "-";
@@ -487,16 +489,19 @@ void loop() {
 
       // Write an Int number on the database path test/int
       if (Firebase.RTDB.setFloat(&fbdo, dataPath_T.c_str(), T)) {
-        Serial.println("PASSED");
+        /*Serial.println("PASSED");
         Serial.println("PATH: " + fbdo.dataPath());
-        Serial.println("TYPE: " + fbdo.dataType());
+        Serial.println("TYPE: " + fbdo.dataType());*/
       }
       else {
-        Serial.println("FAILED");
-        Serial.println("REASON: " + fbdo.errorReason());
+        /*Serial.println("FAILED");
+        Serial.println("REASON: " + fbdo.errorReason());*/
       }
 
-      String dataPath_H(monthDay);
+      //Установим влажность
+      String dataPath_H("BME");
+      dataPath_H += "/";
+      dataPath_H += monthDay;      
       dataPath_H += "-";
       dataPath_H += currentMonth;
       dataPath_H += "-";
@@ -509,14 +514,49 @@ void loop() {
 
       // Write an Float number on the database path test/float
       if (Firebase.RTDB.setFloat(&fbdo, dataPath_H.c_str(), H)) {
-        Serial.println("PASSED");
+        /*Serial.println("PASSED");
         Serial.println("PATH: " + fbdo.dataPath());
-        Serial.println("TYPE: " + fbdo.dataType());
+        Serial.println("TYPE: " + fbdo.dataType());*/
       }
       else {
-        Serial.println("FAILED");
-        Serial.println("REASON: " + fbdo.errorReason());
+      /*  Serial.println("FAILED");
+        Serial.println("REASON: " + fbdo.errorReason());*/
       }
+
+
+      //Установим статусы
+      //Статус вытяжного вентилятора
+      String dataPath_Status("Status");
+      dataPath_Status += "/FAN_is_ON";
+
+
+      // Write an Float number on the database path test/float
+      if (Firebase.RTDB.setBool(&fbdo, dataPath_Status.c_str(), FAN_is_ON)) {
+        /*Serial.println("PASSED");
+        Serial.println("PATH: " + fbdo.dataPath());
+        Serial.println("TYPE: " + fbdo.dataType());*/
+      }
+      else {
+      /*  Serial.println("FAILED");
+        Serial.println("REASON: " + fbdo.errorReason());*/
+      }
+
+      //Статус холодильника
+      dataPath_Status = "Status";
+      dataPath_Status += "/REF_is_ON";
+
+
+      // Write an Float number on the database path test/float
+      if (Firebase.RTDB.setBool(&fbdo, dataPath_Status.c_str(), REF_is_ON)) {
+        /*Serial.println("PASSED");
+        Serial.println("PATH: " + fbdo.dataPath());
+        Serial.println("TYPE: " + fbdo.dataType());*/
+      }
+      else {
+      /*  Serial.println("FAILED");
+        Serial.println("REASON: " + fbdo.errorReason());*/
+      }
+            
     }
     /*        Serial.print("Hour: ");
             Serial.println(currentHour);
@@ -544,14 +584,14 @@ void loop() {
         if (T > 12) {
           digitalWrite(D6_REF, REFRIG_ON);
           REF_is_ON = true;
-          Serial.println("Включаем холодильник");
+          /*Serial.println("Включаем холодильник");
           Serial.print(F("T = "));
           Serial.print(T);
           Serial.println(" *C");
 
           Serial.print(F("H = "));
           Serial.print(H);
-          Serial.println(" %");
+          Serial.println(" %");*/
 
         }
       }
@@ -560,14 +600,14 @@ void loop() {
         if (T < 10) {
           digitalWrite(D6_REF, REFRIG_OFF);
           REF_is_ON = false;
-          Serial.println("Выключаем холодильник");
+          /*Serial.println("Выключаем холодильник");
           Serial.print(F("T = "));
           Serial.print(T);
           Serial.println(" *C");
 
           Serial.print(F("H = "));
           Serial.print(H);
-          Serial.println(" %");
+          Serial.println(" %");*/
 
         }
       }
